@@ -6,10 +6,12 @@ var spaces = [
   NaN, NaN, NaN
 ];
 
+// ---------------------------------------------
 var player1 = 'veggies';
 var player2 = 'junkfood';
 var currentPlayer = null;
 
+// ---------------------------------------------
 var setNextTurn = function () {
   if (currentPlayer === player1) {
     currentPlayer = player2;
@@ -20,6 +22,7 @@ var setNextTurn = function () {
   $('#turn-label').text(currentPlayer);
 };
 
+// ---------------------------------------------
 var checkForWinner = function () {
   // Because (NaN === NaN) is always false, we can safely assume
   // that if three spaces in a row are the same, all three spaces are
@@ -38,24 +41,33 @@ var checkForWinner = function () {
   {
     console.log('somebody won');
     // TODO: Trigger 'game-win' event with the winning player as the event data
-  var game-win
+
+  $(document).trigger('game-win', currentPlayer)
   }
 };
 
+// ---------------------------------------------
 $(document).on('click', '#board .space', function (e) {
-  var spaceNum = $(e.currentTarget).index();
-  console.log('You clicked on space #' + spaceNum);
+    var spaceNum = $(e.currentTarget).index();
+  if (!spaces[spaceNum]) {
+      console.log('You clicked on space #' + spaceNum);
 
-  // Mark the space with the current player's name
-  // TODO: Don't mark it unless the space is blank
-  spaces[spaceNum] = currentPlayer;
-  // Add class to elem so css can take care of the visuals
-  $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
+    // Mark the space with the current player's name
+    // TODO: Don't mark it unless the space is blank
+    spaces[spaceNum] = currentPlayer;
 
-  checkForWinner();
-  setNextTurn();
+    // Add class to elem so css can take care of the visuals
+    $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
+
+    checkForWinner();
+    setNextTurn();
+  } else {
+      alert('Sorry, this space is already taken!');
+  }
+
 });
 
+// -------------------------------------------
 $(document).on('game-win', function (e, winner) {
   // TODO: Alert who won the game
   alert("congratulations " + winner + " is the winner")
